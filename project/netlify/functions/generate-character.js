@@ -52,7 +52,7 @@ export async function handler(event, context) {
     console.log('Generating character with traits:', traits);
 
     // 构建角色描述
-    const characterDescription = `A digital character with these traits: ${traits.join(', ')}. Create a futuristic, digital art style portrait with cyberpunk aesthetics, neon colors, and technological elements.`;
+    const characterDescription = `A digital character with these traits: ${traits.join(', ')}. Create a futuristic, digital art style portrait with cyberpunk aesthetics, neon colors, and technological elements.Full-body portrait`;
 
     // 调用百炼大模型API生成图片
     console.log('Calling image generation API...');
