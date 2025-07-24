@@ -120,48 +120,37 @@ export async function handler(event, context) {
     }
 
     // 使用百炼大模型生成诗歌
-    console.log('Generating poems...');
+    console.log('Generating poem with qwen-plus and axios...');
     const poems = [];
-    for (let i = 0; i < traits.length; i++) {
-      const trait = traits[i];
-      const prompt = `Write a short, elegant poem about the character trait "${trait}" in a digital/cyberpunk context. Keep it to 3 lines maximum.`;
-      
-      try {
-        const poemResponse = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
-          method: 'POST',
+    
+    const poemPrompt = `Compose a classical-style Chinese poem using the following three keywords: ${traits.join(', ')}. The poem should be beautiful and poetic in style, and conform to the format of traditional Chinese verse (e.g., five-character or seven-character quatrain).`;
+    
+    try {
+      const poemResponse = await axios.post(
+        'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation',
+        {
+          model: 'qwen-plus',
+          input: {
+            prompt: poemPrompt
+          },
+          parameters: {}
+        },
+        {
           headers: {
             'Authorization': `Bearer ${BAILIAN_API_KEY}`,
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'qwen-turbo',
-            input: {
-              messages: [
-                {
-                  role: 'user',
-                  content: prompt
-                }
-              ]
-            },
-            parameters: {
-              max_tokens: 100,
-              temperature: 0.8
-            }
-          })
-        });
-
-        const poemResult = await poemResponse.json();
-        if (poemResult.output?.choices?.[0]?.message?.content) {
-          poems.push(poemResult.output.choices[0].message.content.trim());
-        } else {
-          // 备用诗歌
-          poems.push(`In digital realms where ${trait} shines bright,\nThrough circuits deep and data streams of light,\nA character born from code's pure sight.`);
+          }
         }
-      } catch (error) {
-        console.error(`Error generating poem for trait ${trait}:`, error);
-        // 备用诗歌
-        poems.push(`In digital realms where ${trait} shines bright,\nThrough circuits deep and data streams of light,\nA character born from code's pure sight.`);
-      }
+      );
+    
+      const poemText = poemResponse.data.output.text.trim();
+      console.log('Generated poem:', poemText);
+      poems.push(poemText);
+    
+    } catch (error) {
+      console.error('Failed to generate poem:', error.response?.data || error.message);
+      poems.push(`In cyber winds where ${traits[0]} glows,\nThrough neon lights ${traits[1]} flows,\nAnd ${traits[2]} silently grows.`);
+    }
     }
 
     console.log('Character generation completed successfully');
