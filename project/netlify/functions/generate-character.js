@@ -52,7 +52,7 @@ export async function handler(event, context) {
     console.log('Generating character with traits:', traits);
 
     // 构建角色描述
-    const characterDescription = `A digital character with these traits: ${traits.join(', ')}. Create a futuristic, digital art style portrait with cyberpunk aesthetics, neon colors, and technological elements.Full-body portrait`;
+    const characterDescription = `A digital character with these traits: ${traits.join(', ')}. Create a futuristic, digital art style portrait with cyberpunk aesthetics, neon colors, and technological elements.Full-body portrait, espacially has a head and a face.`;
 
     // 调用百炼大模型API生成图片
     console.log('Calling image generation API...');
@@ -123,7 +123,7 @@ export async function handler(event, context) {
       console.log('Generating poem with fetch and qwen-plus...');
       const poems = [];
       
-      const poemPrompt = `Compose a classical Chinese-style poem using the following three keywords: ${traits.join(', ')}. The poem should be elegant, rich in imagery, and follow traditional formats (such as five-character or seven-character quatrain).`;
+      const poemPrompt = `Compose a classical Chinese-style poem using the following three keywords: ${traits.join(', ')}. The poem should be elegant, rich in imagery, and follow traditional formats (such as five-character or seven-character quatrain). Please "only" output the Chinese poem and its English form, anything has nothing to do with poem mustn't appear.`;
       
       try {
         const poemResponse = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
