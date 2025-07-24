@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.handler = async (event, context) => {
+export async function handler(event, context) {
   console.log('Function called with method:', event.httpMethod);
   console.log('Function called with headers:', event.headers);
   
