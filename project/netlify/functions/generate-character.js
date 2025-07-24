@@ -120,37 +120,41 @@ export async function handler(event, context) {
     }
 
     // 使用百炼大模型生成诗歌
-    console.log('Generating poem with qwen-plus and axios...');
-    const poems = [];
-    
-    const poemPrompt = `Compose a classical-style Chinese poem using the following three keywords: ${traits.join(', ')}. The poem should be beautiful and poetic in style, and conform to the format of traditional Chinese verse (e.g., five-character or seven-character quatrain).`;
-    
-    try {
-      const poemResponse = await axios.post(
-        'https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation',
-        {
-          model: 'qwen-plus',
-          input: {
-            prompt: poemPrompt
-          },
-          parameters: {}
-        },
-        {
+      console.log('Generating poem with fetch and qwen-plus...');
+      const poems = [];
+      
+      const poemPrompt = `Compose a classical Chinese-style poem using the following three keywords: ${traits.join(', ')}. The poem should be elegant, rich in imagery, and follow traditional formats (such as five-character or seven-character quatrain).`;
+      
+      try {
+        const poemResponse = await fetch('https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation', {
+          method: 'POST',
           headers: {
             'Authorization': `Bearer ${BAILIAN_API_KEY}`,
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({
+            model: 'qwen-plus',
+            input: {
+              prompt: poemPrompt
+            },
+            parameters: {}
+          })
+        });
+      
+        const poemResult = await poemResponse.json();
+        if (poemResult.output?.text) {
+          const poemText = poemResult.output.text.trim();
+          console.log('Generated poem:', poemText);
+          poems.push(poemText);
+        } else {
+          throw new Error('No output.text in response');
         }
-      );
-    
-      const poemText = poemResponse.data.output.text.trim();
-      console.log('Generated poem:', poemText);
-      poems.push(poemText);
-    
-    } catch (error) {
-      console.error('Failed to generate poem:', error.response?.data || error.message);
-      poems.push(`In cyber winds where ${traits[0]} glows,\nThrough neon lights ${traits[1]} flows,\nAnd ${traits[2]} silently grows.`);
-    }
+      
+      } catch (error) {
+        console.error('Error generating poem:', error);
+        // Fallback poem (English version)
+        poems.push(`In cyber winds where ${traits[0]} glows,\nThrough neon lights ${traits[1]} flows,\nAnd ${traits[2]} silently grows.`);
+      }
     }
 
     console.log('Character generation completed successfully');
