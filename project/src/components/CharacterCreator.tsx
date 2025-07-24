@@ -19,9 +19,9 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     setTraits(newTraits);
   };
 
-  const handleExplore = () => {
-    // Add explore functionality here
-  };
+ const handleExplore = () => {
+  window.open("https://github.com/amber2713/for-netlify/tree/main/project", "_blank");
+};
 
   const generateCharacter = async () => {
     if (traits.some(trait => trait.trim() === '')) {
