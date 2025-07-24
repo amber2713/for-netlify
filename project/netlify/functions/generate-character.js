@@ -154,7 +154,6 @@ export async function handler(event, context) {
         console.error('Error generating poem:', error);
         // Fallback poem (English version)
         poems.push(`In cyber winds where ${traits[0]} glows,\nThrough neon lights ${traits[1]} flows,\nAnd ${traits[2]} silently grows.`);
-      }
     }
 
     console.log('Character generation completed successfully');
