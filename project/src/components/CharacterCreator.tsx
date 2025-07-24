@@ -55,7 +55,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
       setGeneratedContent({
         image: 'https://images.pexels.com/photos/8566473/pexels-photo-8566473.jpeg?auto=compress&cs=tinysrgb&w=500&h=500&dpr=1',
         poems: [
-          `In digital realms where ${traits[0]} shines bright,\nThrough circuits deep and data streams of light,\nA character born from code's pure sight.`,
+          `pippipipipipipppipip ${traits[0]} shines bright,\nThrough circuits deep and data streams of light,\nA character born from code's pure sight.`,
           `Through networks vast where ${traits[1]} flows,\nIn cyber space where wisdom grows,\nA digital soul that truly knows.`,
           `Behold the spirit, ${traits[2]} and true,\nIn bytes and bits, a being new,\nA virtual soul, me and you.`
         ]
