@@ -20,7 +20,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
   };
 
  const handleExplore = () => {
-  window.open("https://github.com/amber2713/for-netlify/tree/main/project", "_blank");
+  window.open("https://www.bilibili.com", "_blank");
 };
 
   const generateCharacter = async () => {
