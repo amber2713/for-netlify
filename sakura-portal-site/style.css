@@ -20,7 +20,7 @@ body, html {
   width: 60px;
   transition: transform 0.3s;
   cursor: pointer;
-  opacity: 0; /* 初始隐藏 */
+  opacity: 0.5; /* 初始隐藏 */
   position: absolute;
 }
 
