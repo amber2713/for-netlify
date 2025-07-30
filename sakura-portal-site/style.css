@@ -1,0 +1,62 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+.background {
+  background: url('background.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(8px);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Icon Common Style */
+.icon {
+  width: 60px;
+  transition: transform 0.3s;
+  cursor: pointer;
+  opacity: 0; /* 初始隐藏 */
+  position: absolute;
+}
+
+/* 悬停放大 */
+.icon:hover {
+  transform: scale(1.5);
+  opacity: 1;
+}
+
+/* 左边隐藏图标 */
+.sakura-left {
+  top: 30%;
+  left: 10%;
+}
+
+/* 右边隐藏图标 */
+.sakura-right {
+  top: 40%;
+  right: 10%;
+}
+
+/* 中间门状图标 */
+.gate-center {
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 视频样式 */
+.video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  max-width: 800px;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 10;
+}

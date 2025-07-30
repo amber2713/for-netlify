@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sakura Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="background"></div>
+
+  <!-- Sakura Icon Left -->
+  <a href="https://www.bilibili.com/" target="_blank">
+    <img src="icons/sakura-icon.png" class="icon sakura-left" />
+  </a>
+
+  <!-- Sakura Icon Right -->
+  <img src="icons/sakura-icon.png" class="icon sakura-right" id="video-trigger"/>
+
+  <!-- Video Hidden -->
+  <video id="sakura-video" class="video" controls>
+    <source src="donghua.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Gate Icon -->
+  <a href="https://chat.qwen.ai/" target="_blank">
+    <img src="icons/gate-icon.png" class="icon gate-center"/>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
