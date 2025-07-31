@@ -20,7 +20,7 @@ body, html {
   width: 60px;
   transition: transform 0.3s;
   cursor: pointer;
-  opacity: 0.8; /* 初始隐藏 */
+  opacity: 0.99; /* 初始隐藏 */
   position: absolute;
 }
 
@@ -45,7 +45,7 @@ body, html {
 /* 中间门状图标 */
 .gate-center {
   bottom: 30%;
-  left: 75%;
+  left: 70%;
   transform: translateX(-50%);
 }
 
