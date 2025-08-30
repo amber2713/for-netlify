@@ -20,6 +20,36 @@
             background: #1a3a23;
         }
         
+        /* 樱花图标样式 */
+        .sakura-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 183, 197, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sakura-icon:hover {
+            transform: scale(1.1);
+            background: rgba(255, 183, 197, 1);
+            box-shadow: 0 5px 15px rgba(255, 183, 197, 0.4);
+        }
+        
+        .sakura-icon i {
+            color: white;
+            font-size: 24px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
         /* 背景模糊效果 - 使用您提供的图片 */
         .background {
             position: fixed;
@@ -622,6 +652,17 @@
         
         /* 响应式设计 */
         @media (max-width: 768px) {
+            .sakura-icon {
+                top: 15px;
+                left: 15px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .sakura-icon i {
+                font-size: 18px;
+            }
+            
             .title h1 { font-size: 2.5rem; }
             .title p { font-size: 1.1rem; }
             
@@ -644,6 +685,11 @@
     </style>
 </head>
 <body>
+    <!-- 樱花图标 -->
+    <a href="https://amber2713.github.io/Sakura-Avenue/sakura/" class="sakura-icon">
+        <i class="fas fa-cherry-blossom"></i>
+    </a>
+    
     <div class="background"></div>
     <div class="overlay"></div>
     
