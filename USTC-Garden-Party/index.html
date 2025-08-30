@@ -1,350 +1,1404 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzAwMDAwMCIgZD0iTTEyIDJjNS41IDIwIDEyIDMuNSAxMiA5cy02LjUgOS0xMiA5LTExLjktNi41LTEyLTktMTIgOSA2LjUgOSAxMiA5cyAxMi0zLjUgMTItOXMtNi41LTktMTItOXptMCAxNGMyLjIgMCA0LDEuOCA0IDRzLTEuOCA0LTQgNC00LTEuOC00LTRzMS44LTQgNC00em0tNi00aDExdjJoLTExeiIvPjwvc3ZnPg==" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Choose Your Destination Interface</title>
-    <!-- 使用国内CDN资源 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcdn.net/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#ffffff',
-                        overlay: 'rgba(255,255,255,0.1)',
-                    },
-                }
-            }
-        }
-    </script>
-    
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-        }
-    </style>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USTC Garden Party</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 移除Google字体依赖，使用系统字体栈 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            font-family: 'Times New Roman', Georgia, serif;
+            overflow: hidden;
+            height: 100vh;
+            perspective: 1000px;
+            background: #1a3a23;
+        }
+        
+        /* 背景模糊效果 - 使用您提供的图片 */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/images/youyuanhui.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px) brightness(0.85);
+            transform: scale(1.02);
+            z-index: -2;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(25, 55, 30, 0.6) 0%, rgba(15, 35, 20, 0.8) 100%);
+            z-index: -1;
+        }
+        
+        .container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .title h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #e6c229, #f8f0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .title p {
+            font-size: 1.4rem;
+            font-weight: 300;
+            max-width: 700px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        /* 路径样式 */
+        .path {
+            position: absolute;
+            bottom: 0;
+            width: 85%;
+            height: 300px;
+            background: linear-gradient(to top, rgba(139, 69, 19, 0.8), rgba(101, 67, 33, 0.6));
+            border-radius: 50% 50% 0 0;
+            transform: perspective(1000px) rotateX(40deg);
+            box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.7);
+            z-index: 2;
+        }
+        
+        .path::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #e6c229, transparent);
+        }
+        
+        /* 图标容器 */
+        .icons-container {
+            position: absolute;
+            bottom: 180px;
+            width: 85%;
+            display: flex;
+            justify-content: space-around;
+            z-index: 5;
+            transform: perspective(1000px) rotateX(30deg);
+        }
+        
+        .icon {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        .icon:nth-child(1) { animation-delay: 0s; }
+        .icon:nth-child(2) { animation-delay: 1s; }
+        .icon:nth-child(3) { animation-delay: 2s; }
+        
+        .icon:hover {
+            transform: scale(1.3) translateY(-20px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(230, 194, 41, 0.5);
+        }
+        
+        .icon i {
+            font-size: 50px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .icon-label {
+            position: absolute;
+            bottom: -30px;
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #2c5e3a, #1a3a23);
+            width: 90%;
+            max-width: 900px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.4s ease;
+        }
+        
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            color: #e6c229;
+            font-size: 2.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(230, 194, 41, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .close-btn i {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .modal-body {
+            padding: 30px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* 围棋游戏样式 - 交叉点设计 */
+        .go-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .go-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .go-btn {
+            padding: 10px 20px;
+            background: rgba(230, 194, 41, 0.8);
+            border: none;
+            border-radius: 30px;
+            color: #1a3a23;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .go-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(230, 194, 41, 0.5);
+        }
+        
+        .go-status {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: #e6c229;
+            text-align: center;
+        }
+        
+        .go-board {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background: #dcb35c;
+            border: 4px solid #8b5a2b;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+        }
+        
+        /* 水平线 */
+        .horizontal-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #000;
+        }
+        
+        /* 垂直线 */
+        .vertical-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #000;
+        }
+        
+        /* 交叉点 */
+        .intersection {
+            position: relative;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .intersection::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #000;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        /* 星位点 */
+        .intersection.star-point::before {
+            width: 12px;
+            height: 12px;
+            opacity: 0.8;
+        }
+        
+        /* 棋子 */
+        .stone {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+            z-index: 3;
+        }
+        
+        .stone.black {
+            background: radial-gradient(circle at 30% 30%, #fff, #000 80%);
+        }
+        
+        .stone.white {
+            background: radial-gradient(circle at 30% 30%, #fff, #e0e0e0 80%);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-message {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            color: #e6c229;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        .game-message.show {
+            opacity: 1;
+        }
+        
+        /* 扇子模态框样式 */
+        .fan-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .fan-textarea {
+            width: 100%;
+            max-width: 500px;
+            height: 150px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border: 2px solid #e6c229;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.2rem;
+            resize: none;
+            outline: none;
+        }
+        
+        .fan-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .fan-options {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .fan-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: none;
+            background: #e6c229;
+            color: #1a3a23;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .fan-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(230, 194, 41, 0.6);
+        }
+        
+        .fan-btn.leave {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        /* 扇子画廊样式 */
+        .gallery-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .fan-display {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 20px 0;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .fan-paper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #f8f0e0;
+            border-radius: 0 50% 50% 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: left center;
+            transition: transform 0.8s ease;
+            padding: 40px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #5a2a0e;
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .gallery-controls {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .gallery-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e6c229;
+        }
+        
+        .gallery-btn:hover {
+            background: rgba(230, 194, 41, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .gallery-btn i {
+            color: white;
+            font-size: 24px;
+        }
+        
+        /* 音乐模态框样式 */
+        .music-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .dialog-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            max-width: 500px;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .dialog-box::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20%;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.1) transparent transparent;
+        }
+        
+        .song-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .song-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .song-item:hover {
+            background: rgba(230, 194, 41, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .song-item.active {
+            background: rgba(230, 194, 41, 0.4);
+            box-shadow: 0 0 15px rgba(230, 194, 41, 0.5);
+        }
+        
+        .song-item i {
+            color: #e6c229;
+        }
+        
+        .audio-player {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 15px;
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('https://www.transparenttextures.com/patterns/leaves-pattern.png');
+            opacity: 0.7;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        /* 音乐来源说明 */
+        .music-credit {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+        
+        .music-credit a {
+            color: #e6c229;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .title h1 { font-size: 2.5rem; }
+            .title p { font-size: 1.1rem; }
+            
+            .icon { width: 70px; height: 70px; }
+            .icon i { font-size: 35px; }
+            
+            .go-board { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; }
+            .stone { width: 28px; height: 28px; }
+            
+            .fan-options { flex-direction: column; gap: 15px; }
+            
+            .song-list { grid-template-columns: 1fr; }
+            
+            .music-credit {
+                bottom: 10px;
+                right: 10px;
+                top: auto;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    
+    <!-- 创建飘落的叶子 -->
+    <div class="leaves"></div>
+    
+    <div class="container">
+        <div class="title">
+            <h1>USTC Garden Party</h1>
+            <p>Explore our enchanting garden filled with games, art, and music. Click on the icons along the path to discover unique experiences.</p>
+        </div>
+        
+        <div class="path"></div>
+        
+        <div class="icons-container">
+            <div class="icon" id="chess-icon">
+                <i class="fas fa-chess"></i>
+                <div class="icon-label">Go Club</div>
+            </div>
+            
+            <div class="icon" id="fan-icon">
+                <i class="fas fa-fan"></i>
+                <div class="icon-label">Poetry Fan</div>
+            </div>
+            
+            <div class="icon" id="music-icon">
+                <i class="fas fa-music"></i>
+                <div class="icon-label">Xuan Yin Club</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 围棋模态框 -->
+    <div class="modal" id="chess-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>USTC Go Club</h2>
+                <div class="close-btn">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="go-container">
+                    <div class="go-status" id="go-status">Black's Turn</div>
+                    <div class="go-controls">
+                        <button class="go-btn" id="pass-btn">Pass</button>
+                        <button class="go-btn" id="resign-btn">Resign</button>
+                        <button class="go-btn" id="restart-btn">Restart</button>
+                    </div>
+                    <div class="go-board" id="go-board">
+                        <!-- 围棋棋盘通过JS生成 -->
+                    </div>
+                    <div class="game-message" id="game-message"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 扇子模态框 -->
+    <div class="modal" id="fan-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Poetry Fan Creation</h2>
+                <div class="close-btn">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="fan-container" id="fan-container">
+                    <textarea class="fan-textarea" placeholder="Write your poetic thoughts here..."></textarea>
+                    <div class="fan-options">
+                        <button class="fan-btn" id="submit-fan">Schoolmates Talent</button>
+                        <button class="fan-btn leave" id="leave-fan">Leave</button>
+                    </div>
+                </div>
+                
+                <div class="gallery-container" id="gallery-container" style="display: none;">
+                    <div class="fan-display">
+                        <div class="fan-paper" id="fan-display">The journey of a thousand miles begins with a single step.</div>
+                    </div>
+                    <div class="gallery-controls">
+                        <div class="gallery-btn" id="prev-fan">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <div class="gallery-btn" id="next-fan">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 音乐模态框 -->
+    <div class="modal" id="music-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Xuan Yin Club</h2>
+                <div class="close-btn">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="music-container">
+                    <div class="dialog-box">
+                        What song would you like to listen to today?
+                    </div>
+                    
+                    <div class="song-list">
+                        <div class="song-item" data-song="song1">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Serene Garden</span>
+                        </div>
+                        <div class="song-item" data-song="song2">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Peaceful Stream</span>
+                        </div>
+                        <div class="song-item" data-song="song3">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Morning Dew</span>
+                        </div>
+                        <div class="song-item" data-song="song4">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Bamboo Forest</span>
+                        </div>
+                    </div>
+                    
+                    <div class="audio-player">
+                        <audio id="audio-player" controls>
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 音乐来源说明 -->
+    <div class="music-credit">
+        Music from <a href="https://pixabay.com/music/" target="_blank">Pixabay Music</a>
+    </div>
+    
     <script>
-        // 图标组件定义
-        const MapPin = ({ size }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-        );
-        
-        const BookOpen = ({ size }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
-        );
-        
-        const School = ({ size }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 10V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4"></path>
-                <path d="M12 2v20"></path>
-                <path d="M19 10v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4"></path>
-                <path d="M6 10H4v4h2"></path>
-                <path d="M18 10h2v4h-2"></path>
-            </svg>
-        );
-        
-        const TreePine = ({ size }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22v-7"></path>
-                <path d="M4 15h16"></path>
-                <path d="M8 11h8"></path>
-                <path d="M6 19h12"></path>
-                <path d="M9 7h6"></path>
-                <path d="M12 3v4"></path>
-            </svg>
-        );
-
-        // 浮动点动画组件
-        const FloatingDots = () => {
-            const [dots, setDots] = React.useState([]);
-
-            React.useEffect(() => {
-                // 生成随机点
-                const generateDots = () => {
-                    const newDots = [];
-                    for (let i = 0; i < 50; i++) {
-                        newDots.push({
-                            id: i,
-                            x: Math.random() * window.innerWidth,
-                            y: Math.random() * window.innerHeight,
-                            size: Math.random() * 3 + 1,
-                            speedX: (Math.random() - 0.5) * 0.5,
-                            speedY: (Math.random() - 0.5) * 0.5,
-                        });
-                    }
-                    setDots(newDots);
-                };
-
-                generateDots();
+        // 创建飘落的叶子
+        function createLeaves() {
+            const leavesContainer = document.querySelector('.leaves');
+            const leafCount = 15;
+            
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
                 
-                // 使用requestAnimationFrame优化动画性能
-                let requestId;
-                const animateDots = () => {
-                    setDots(prevDots => 
-                        prevDots.map(dot => ({
-                            ...dot,
-                            x: (dot.x + dot.speedX + window.innerWidth) % window.innerWidth,
-                            y: (dot.y + dot.speedY + window.innerHeight) % window.innerHeight,
-                        }))
-                    );
-                    requestId = requestAnimationFrame(animateDots);
-                };
-
-                requestId = requestAnimationFrame(animateDots);
+                // 随机位置
+                const left = Math.random() * 100;
+                leaf.style.left = `${left}vw`;
                 
-                // 处理窗口大小改变
-                const handleResize = () => {
-                    generateDots();
-                };
+                // 随机大小
+                const size = Math.random() * 20 + 10;
+                leaf.style.width = `${size}px`;
+                leaf.style.height = `${size}px`;
                 
-                window.addEventListener('resize', handleResize);
+                // 随机动画时长和延迟
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+                leaf.style.animation = `fall ${duration}s linear ${delay}s infinite`;
                 
-                return () => {
-                    cancelAnimationFrame(requestId);
-                    window.removeEventListener('resize', handleResize);
-                };
-            }, []);
-
-            return (
-                <div className="fixed inset-0 pointer-events-none">
-                    {dots.map(dot => (
-                        <div
-                            key={dot.id}
-                            className="absolute rounded-full bg-white opacity-60"
-                            style={{
-                                left: `${dot.x}px`,
-                                top: `${dot.y}px`,
-                                width: `${dot.size}px`,
-                                height: `${dot.size}px`,
-                            }}
-                        />
-                    ))}
-                </div>
-            );
-        };
-
-        // 目的地图标组件
-        const DestinationIcon = ({ icon, title, englishName, onClick }) => {
-            const [isHovered, setIsHovered] = React.useState(false);
-
-            return (
-                <div
-                    className={`relative cursor-pointer transition-all duration-300 transform ${
-                        isHovered ? 'scale-125' : 'scale-100'
-                    }`}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    onClick={onClick}
-                    aria-label={`前往 ${title}（${englishName}）`}
-                    role="button"
-                >
-                    <div className="flex flex-col items-center space-y-3">
-                        <div className={`
-                            p-6 rounded-full bg-overlay backdrop-blur-sm 
-                            border border-primary border-opacity-30 
-                            transition-all duration-300 
-                            ${isHovered ? 'bg-opacity-20 shadow-lg shadow-white/20' : ''}
-                        `}>
-                            <div className="text-primary text-4xl">
-                                {icon}
-                            </div>
-                        </div>
-                        
-                        <div className={`
-                            text-center transition-all duration-300 
-                            ${isHovered ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-2'}
-                        `}>
-                            <h3 className="text-primary font-bold text-lg mb-1" style={{ 
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(255,255,255,0.3)'
-                            }}>
-                                {title}
-                            </h3>
-                            <p className="text-primary text-sm opacity-90" style={{ 
-                                textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                            }}>
-                                {englishName}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        // 主应用组件
-        function App() {
-            const destinations = [
-                {
-                    icon: React.createElement(MapPin, { size: 48 }),
-                    title: "郭沫若广场",
-                    englishName: "Guo Moruo Square",
-                    url: "https://chat.qwen.ai"
-                },
-                {
-                    icon: React.createElement(TreePine, { size: 48 }),
-                    title: "樱花大道",
-                    englishName: "Cherry Blossom Avenue",
-                    url: "https://chat.qwen.ai"
-                },
-                {
-                    icon: React.createElement(BookOpen, { size: 48 }),
-                    title: "图书馆",
-                    englishName: "Library",
-                    url: "https://chat.qwen.ai"
-                },
-                {
-                    icon: React.createElement(School, { size: 48 }),
-                    title: "校史馆",
-                    englishName: "School History Museum",
-                    url: "https://chat.qwen.ai"
-                }
-            ];
-
-            // 处理点击事件，添加弹窗拦截检测
-            const handleDestinationClick = (url, title) => {
-                try {
-                    const newWindow = window.open(url, '_blank');
-                    if (!newWindow) {
-                        alert(`前往“${title}”的弹窗被拦截，请允许浏览器弹窗后重试`);
-                    }
-                } catch (error) {
-                    alert(`打开“${title}”时发生错误: ${error.message}`);
-                }
-            };
-
-            return React.createElement(
-                'div',
-                { className: 'min-h-screen bg-black relative overflow-hidden' },
-                // 背景图片 - 使用在线图片替代本地图片，避免路径问题
-                React.createElement('div', {
-                    className: 'absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30',
-                    style: {
-                        backgroundImage: `url('https://picsum.photos/id/1015/1920/1080')`,
-                        backgroundBlendMode: 'overlay'
-                    }
-                }),
-                
-                // 浮动点动画
-                React.createElement(FloatingDots),
-                
-                // 主要内容
-                React.createElement(
-                    'div',
-                    { className: 'relative z-10 min-h-screen flex flex-col items-center justify-center px-4' },
-                    // 主标题
-                    React.createElement(
-                        'div',
-                        { className: 'text-center mb-16' },
-                        React.createElement(
-                            'h1',
-                            {
-                                className: 'text-5xl md:text-6xl lg:text-7xl font-bold text-primary mb-4',
-                                style: {
-                                    textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 12px rgba(255,255,255,0.4), 0 0 20px rgba(255,255,255,0.2)'
-                                }
-                            },
-                            'Choose Your Destination'
-                        ),
-                        React.createElement('div', { className: 'w-32 h-1 bg-primary bg-opacity-60 mx-auto rounded-full' })
-                    ),
-
-                    // 目的地图标网格
-                    React.createElement(
-                        'div',
-                        { className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16 md:gap-20 lg:gap-24 max-w-4xl mx-auto' },
-                        // 非线性定位使用自定义变换
-                        React.createElement(DestinationIcon, {
-                            icon: destinations[0].icon,
-                            title: destinations[0].title,
-                            englishName: destinations[0].englishName,
-                            onClick: () => handleDestinationClick(destinations[0].url, destinations[0].title),
-                            className: 'md:transform md:translate-x-8 md:-translate-y-4'
-                        }),
-                        
-                        React.createElement(DestinationIcon, {
-                            icon: destinations[1].icon,
-                            title: destinations[1].title,
-                            englishName: destinations[1].englishName,
-                            onClick: () => handleDestinationClick(destinations[1].url, destinations[1].title),
-                            className: 'md:transform md:-translate-x-4 md:translate-y-8'
-                        }),
-                        
-                        React.createElement(DestinationIcon, {
-                            icon: destinations[2].icon,
-                            title: destinations[2].title,
-                            englishName: destinations[2].englishName,
-                            onClick: () => handleDestinationClick(destinations[2].url, destinations[2].title),
-                            className: 'md:transform md:-translate-x-12 md:-translate-y-2'
-                        }),
-                        
-                        React.createElement(DestinationIcon, {
-                            icon: destinations[3].icon,
-                            title: destinations[3].title,
-                            englishName: destinations[3].englishName,
-                            onClick: () => handleDestinationClick(destinations[3].url, destinations[3].title),
-                            className: 'md:transform md:translate-x-6 md:translate-y-6'
-                        })
-                    ),
-
-                    // 导航提示
-                    React.createElement(
-                        'div',
-                        { className: 'mt-20' },
-                        React.createElement(
-                            'p',
-                            {
-                                className: 'text-primary text-lg opacity-80 text-center animate-pulse',
-                                style: {
-                                    textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                                }
-                            },
-                            'Click on any destination to explore'
-                        )
-                    )
-                )
-            );
-        }
-
-        // 确保DOM加载完成后再渲染
-        document.addEventListener('DOMContentLoaded', () => {
-            // 验证React是否加载成功
-            if (window.React && window.ReactDOM) {
-                ReactDOM.render(
-                    React.createElement(App),
-                    document.getElementById('root')
-                );
-            } else {
-                console.error('React未加载成功，请检查网络连接');
-                document.getElementById('root').innerHTML = `
-                    <div class="text-white text-center p-8">
-                        <h2>加载失败</h2>
-                        <p>请检查网络连接后刷新页面重试</p>
-                    </div>
-                `;
+                leavesContainer.appendChild(leaf);
             }
+        }
+        
+        // 围棋游戏状态
+        const GoGame = {
+            boardSize: 9,
+            board: [],
+            currentPlayer: 'black', // 'black' or 'white'
+            gameOver: false,
+            passes: 0,
+            capturedStones: { black: 0, white: 0 },
+            koPoint: null,
+            
+            init() {
+                // 初始化空棋盘
+                this.board = [];
+                for (let i = 0; i < this.boardSize; i++) {
+                    this.board[i] = [];
+                    for (let j = 0; j < this.boardSize; j++) {
+                        this.board[i][j] = null;
+                    }
+                }
+                
+                this.currentPlayer = 'black';
+                this.gameOver = false;
+                this.passes = 0;
+                this.capturedStones = { black: 0, white: 0 };
+                this.koPoint = null;
+                
+                this.updateStatus();
+            },
+            
+            // 检查是否在棋盘内
+            isOnBoard(x, y) {
+                return x >= 0 && x < this.boardSize && y >= 0 && y < this.boardSize;
+            },
+            
+            // 获取相邻位置
+            getAdjacentPositions(x, y) {
+                return [
+                    [x-1, y], [x+1, y], [x, y-1], [x, y+1]
+                ].filter(pos => this.isOnBoard(pos[0], pos[1]));
+            },
+            
+            // 获取气
+            getLiberties(x, y) {
+                if (this.board[x][y] === null) return [];
+                
+                const color = this.board[x][y];
+                const group = this.findGroup(x, y);
+                let liberties = [];
+                
+                group.forEach(pos => {
+                    const [px, py] = pos;
+                    this.getAdjacentPositions(px, py).forEach(adj => {
+                        const [ax, ay] = adj;
+                        if (this.board[ax][ay] === null && !liberties.some(l => l[0] === ax && l[1] === ay)) {
+                            liberties.push([ax, ay]);
+                        }
+                    });
+                });
+                
+                return liberties;
+            },
+            
+            // 查找相连的棋子
+            findGroup(x, y) {
+                const color = this.board[x][y];
+                if (color === null) return [];
+                
+                const group = [];
+                const visited = {};
+                const stack = [[x, y]];
+                
+                while (stack.length > 0) {
+                    const [cx, cy] = stack.pop();
+                    const key = `${cx},${cy}`;
+                    
+                    if (visited[key]) continue;
+                    visited[key] = true;
+                    group.push([cx, cy]);
+                    
+                    this.getAdjacentPositions(cx, cy).forEach(pos => {
+                        const [ax, ay] = pos;
+                        if (this.board[ax][ay] === color && !visited[`${ax},${ay}`]) {
+                            stack.push([ax, ay]);
+                        }
+                    });
+                }
+                
+                return group;
+            },
+            
+            // 检查是否自杀
+            isSuicide(x, y, color) {
+                // 临时落子
+                this.board[x][y] = color;
+                
+                // 检查自己的气
+                const liberties = this.getLiberties(x, y);
+                
+                // 如果还有气，不是自杀
+                if (liberties.length > 0) {
+                    this.board[x][y] = null;
+                    return false;
+                }
+                
+                // 检查是否提了对方的子
+                let captured = false;
+                this.getAdjacentPositions(x, y).forEach(pos => {
+                    const [ax, ay] = pos;
+                    if (this.board[ax][ay] && this.board[ax][ay] !== color) {
+                        const adjLiberties = this.getLiberties(ax, ay);
+                        if (adjLiberties.length === 0) {
+                            captured = true;
+                        }
+                    }
+                });
+                
+                // 撤销临时落子
+                this.board[x][y] = null;
+                
+                // 如果没有提子，则是自杀
+                return !captured;
+            },
+            
+            // 检查打劫
+            isKo(x, y, color) {
+                if (this.koPoint === null) return false;
+                
+                // 临时落子
+                this.board[x][y] = color;
+                
+                // 检查是否提了一个子
+                let capturedSingle = false;
+                let capturedPos = null;
+                
+                this.getAdjacentPositions(x, y).forEach(pos => {
+                    const [ax, ay] = pos;
+                    if (this.board[ax][ay] && this.board[ax][ay] !== color) {
+                        const adjLiberties = this.getLiberties(ax, ay);
+                        if (adjLiberties.length === 0) {
+                            // 检查是否只提了一个子
+                            const group = this.findGroup(ax, ay);
+                            if (group.length === 1) {
+                                capturedSingle = true;
+                                capturedPos = [ax, ay];
+                            }
+                        }
+                    }
+                });
+                
+                // 撤销临时落子
+                this.board[x][y] = null;
+                
+                // 如果只提了一个子，并且位置与劫点相同
+                return capturedSingle && capturedPos[0] === this.koPoint[0] && capturedPos[1] === this.koPoint[1];
+            },
+            
+            // 放置棋子
+            placeStone(x, y) {
+                if (this.gameOver || this.board[x][y] !== null) return false;
+                
+                const color = this.currentPlayer;
+                
+                // 检查自杀
+                if (this.isSuicide(x, y, color)) {
+                    return false;
+                }
+                
+                // 检查打劫
+                if (this.isKo(x, y, color)) {
+                    return false;
+                }
+                
+                // 放置棋子
+                this.board[x][y] = color;
+                
+                // 重置劫点
+                this.koPoint = null;
+                
+                // 提子
+                let captured = false;
+                this.getAdjacentPositions(x, y).forEach(pos => {
+                    const [ax, ay] = pos;
+                    if (this.board[ax][ay] && this.board[ax][ay] !== color) {
+                        const adjLiberties = this.getLiberties(ax, ay);
+                        if (adjLiberties.length === 0) {
+                            const group = this.findGroup(ax, ay);
+                            
+                            // 记录劫点
+                            if (group.length === 1) {
+                                this.koPoint = [ax, ay];
+                            }
+                            
+                            group.forEach(stone => {
+                                const [sx, sy] = stone;
+                                this.board[sx][sy] = null;
+                                this.capturedStones[color]++;
+                                captured = true;
+                            });
+                        }
+                    }
+                });
+                
+                // 切换玩家
+                this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                this.passes = 0;
+                this.updateStatus();
+                
+                return true;
+            },
+            
+            // 过
+            pass() {
+                this.passes++;
+                this.currentPlayer = this.currentPlayer === 'black' ? 'white' : 'black';
+                
+                if (this.passes >= 2) {
+                    this.endGame();
+                }
+                
+                this.updateStatus();
+            },
+            
+            // 认输
+            resign() {
+                this.gameOver = true;
+                const winner = this.currentPlayer === 'black' ? 'White' : 'Black';
+                this.showMessage(`${winner} wins by resignation!`);
+            },
+            
+            // 结束游戏
+            endGame() {
+                this.gameOver = true;
+                
+                // 简单计算胜负（实际围棋规则更复杂）
+                let blackStones = 0;
+                let whiteStones = 0;
+                
+                for (let i = 0; i < this.boardSize; i++) {
+                    for (let j = 0; j < this.boardSize; j++) {
+                        if (this.board[i][j] === 'black') blackStones++;
+                        if (this.board[i][j] === 'white') whiteStones++;
+                    }
+                }
+                
+                // 黑棋贴目（6.5目）
+                const komi = 6.5;
+                const blackScore = blackStones + this.capturedStones.black;
+                const whiteScore = whiteStones + this.capturedStones.white + komi;
+                
+                if (blackScore > whiteScore) {
+                    this.showMessage(`Black wins by ${(blackScore - whiteScore).toFixed(1)} points!`);
+                } else {
+                    this.showMessage(`White wins by ${(whiteScore - blackScore).toFixed(1)} points!`);
+                }
+            },
+            
+            // 更新状态显示
+            updateStatus() {
+                const statusElement = document.getElementById('go-status');
+                if (this.gameOver) {
+                    statusElement.textContent = "Game Over";
+                } else {
+                    const player = this.currentPlayer === 'black' ? "Black" : "White";
+                    statusElement.textContent = `${player}'s Turn`;
+                }
+            },
+            
+            // 显示消息
+            showMessage(msg) {
+                const messageElement = document.getElementById('game-message');
+                messageElement.textContent = msg;
+                messageElement.classList.add('show');
+                
+                setTimeout(() => {
+                    messageElement.classList.remove('show');
+                }, 5000);
+            }
+        };
+        
+        // 初始化围棋棋盘（交叉点设计）
+        function initGoBoard() {
+            const board = document.getElementById('go-board');
+            board.innerHTML = '';
+            
+            const boardSize = GoGame.boardSize;
+            const cellSize = 100 / boardSize;
+            
+            // 创建星位点位置
+            const starPoints = [
+                [2, 2], [2, 6], [6, 2], [6, 6],
+                [4, 4] // 天元
+            ];
+            
+            // 创建网格线
+            for (let i = 0; i < boardSize; i++) {
+                // 水平线
+                const hLine = document.createElement('div');
+                hLine.className = 'horizontal-line';
+                hLine.style.top = `${(i * cellSize) + (cellSize / 2)}%`;
+                board.appendChild(hLine);
+                
+                // 垂直线
+                const vLine = document.createElement('div');
+                vLine.className = 'vertical-line';
+                vLine.style.left = `${(i * cellSize) + (cellSize / 2)}%`;
+                board.appendChild(vLine);
+            }
+            
+            // 创建交叉点
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    const intersection = document.createElement('div');
+                    intersection.className = 'intersection';
+                    intersection.dataset.row = row;
+                    intersection.dataset.col = col;
+                    
+                    // 设置位置
+                    intersection.style.gridRow = row + 1;
+                    intersection.style.gridColumn = col + 1;
+                    
+                    // 添加星位点
+                    const isStarPoint = starPoints.some(point => point[0] === row && point[1] === col);
+                    if (isStarPoint) {
+                        intersection.classList.add('star-point');
+                    }
+                    
+                    intersection.addEventListener('click', handleGoMove);
+                    board.appendChild(intersection);
+                }
+            }
+            
+            // 初始化游戏状态
+            GoGame.init();
+        }
+        
+        // 处理围棋移动
+        function handleGoMove(e) {
+            if (GoGame.gameOver) return;
+            
+            const intersection = e.currentTarget;
+            const row = parseInt(intersection.dataset.row);
+            const col = parseInt(intersection.dataset.col);
+            
+            // 落子
+            if (GoGame.placeStone(row, col)) {
+                // 更新棋盘显示
+                updateBoardDisplay();
+                
+                // AI响应
+                setTimeout(makeAIMove, 800);
+            }
+        }
+        
+        // 更新棋盘显示
+        function updateBoardDisplay() {
+            const board = document.getElementById('go-board');
+            
+            // 移除所有棋子
+            document.querySelectorAll('.stone').forEach(stone => stone.remove());
+            
+            // 添加棋子
+            for (let row = 0; row < GoGame.boardSize; row++) {
+                for (let col = 0; col < GoGame.boardSize; col++) {
+                    if (GoGame.board[row][col] !== null) {
+                        const intersection = document.querySelector(`.intersection[data-row="${row}"][data-col="${col}"]`);
+                        const stone = document.createElement('div');
+                        stone.className = `stone ${GoGame.board[row][col]}`;
+                        intersection.appendChild(stone);
+                    }
+                }
+            }
+        }
+        
+        // AI落子
+        function makeAIMove() {
+            if (GoGame.gameOver || GoGame.currentPlayer === 'black') return;
+            
+            // 简单AI：寻找可以提子或连接的位置
+            let moveFound = false;
+            
+            // 尝试提子
+            for (let row = 0; row < GoGame.boardSize && !moveFound; row++) {
+                for (let col = 0; col < GoGame.boardSize && !moveFound; col++) {
+                    if (GoGame.board[row][col] === null) {
+                        // 临时落子
+                        GoGame.board[row][col] = 'white';
+                        
+                        // 检查是否可以提子
+                        GoGame.getAdjacentPositions(row, col).forEach(pos => {
+                            const [ax, ay] = pos;
+                            if (GoGame.board[ax][ay] === 'black') {
+                                const adjLiberties = GoGame.getLiberties(ax, ay);
+                                if (adjLiberties.length === 0) {
+                                    moveFound = true;
+                                }
+                            }
+                        });
+                        
+                        // 撤销临时落子
+                        GoGame.board[row][col] = null;
+                        
+                        if (moveFound) {
+                            GoGame.placeStone(row, col);
+                            updateBoardDisplay();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            // 尝试连接自己的棋子
+            for (let row = 0; row < GoGame.boardSize && !moveFound; row++) {
+                for (let col = 0; col < GoGame.boardSize && !moveFound; col++) {
+                    if (GoGame.board[row][col] === null) {
+                        // 检查是否连接自己的棋子
+                        GoGame.getAdjacentPositions(row, col).forEach(pos => {
+                            const [ax, ay] = pos;
+                            if (GoGame.board[ax][ay] === 'white') {
+                                // 临时落子
+                                GoGame.board[row][col] = 'white';
+                                
+                                // 检查是否增加了气
+                                const liberties = GoGame.getLiberties(ax, ay);
+                                if (liberties.length > 1) {
+                                    moveFound = true;
+                                }
+                                
+                                // 撤销临时落子
+                                GoGame.board[row][col] = null;
+                            }
+                        });
+                        
+                        if (moveFound) {
+                            GoGame.placeStone(row, col);
+                            updateBoardDisplay();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            // 随机落子
+            const emptyPoints = [];
+            for (let row = 0; row < GoGame.boardSize; row++) {
+                for (let col = 0; col < GoGame.boardSize; col++) {
+                    if (GoGame.board[row][col] === null) {
+                        emptyPoints.push([row, col]);
+                    }
+                }
+            }
+            
+            if (emptyPoints.length > 0) {
+                const randomIndex = Math.floor(Math.random() * emptyPoints.length);
+                const [row, col] = emptyPoints[randomIndex];
+                GoGame.placeStone(row, col);
+                updateBoardDisplay();
+            } else {
+                // 没有空位了，游戏结束
+                GoGame.endGame();
+            }
+        }
+        
+        // 生成扇子文本
+        const fanTexts = [
+            "The journey of a thousand miles begins with a single step.",
+            "In the midst of movement and chaos, keep stillness inside of you.",
+            "Life is really simple, but we insist on making it complicated.",
+            "Nature does not hurry, yet everything is accomplished.",
+            "The best time to plant a tree was 20 years ago. The second best time is now.",
+            "He who knows that enough is enough will always have enough.",
+            "Silence is a source of great strength.",
+            "To the mind that is still, the whole universe surrenders.",
+            "When I let go of what I am, I become what I might be.",
+            "Knowing others is intelligence; knowing yourself is true wisdom."
+        ];
+        
+        let currentFanIndex = 0;
+        
+        // 显示扇子文本
+        function showFanText() {
+            const fanDisplay = document.getElementById('fan-display');
+            fanDisplay.textContent = fanTexts[currentFanIndex];
+        }
+        
+        // 事件监听器
+        document.addEventListener('DOMContentLoaded', () => {
+            // 创建叶子
+            createLeaves();
+            
+            // 初始化围棋棋盘
+            initGoBoard();
+            
+            // 显示第一个扇子文本
+            showFanText();
+            
+            // 图标点击事件
+            document.getElementById('chess-icon').addEventListener('click', () => {
+                document.getElementById('chess-modal').classList.add('active');
+            });
+            
+            document.getElementById('fan-icon').addEventListener('click', () => {
+                document.getElementById('fan-modal').classList.add('active');
+            });
+            
+            document.getElementById('music-icon').addEventListener('click', () => {
+                document.getElementById('music-modal').classList.add('active');
+            });
+            
+            // 关闭按钮事件
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
+            
+            // 扇子提交按钮
+            document.getElementById('submit-fan').addEventListener('click', () => {
+                const fanContainer = document.getElementById('fan-container');
+                const galleryContainer = document.getElementById('gallery-container');
+                const textarea = document.querySelector('.fan-textarea');
+                
+                // 如果文本框有内容，添加到扇子文本中
+                if (textarea.value.trim() !== '') {
+                    fanTexts.push(textarea.value);
+                }
+                
+                fanContainer.style.display = 'none';
+                galleryContainer.style.display = 'flex';
+                
+                // 随机选择一个扇子文本
+                currentFanIndex = Math.floor(Math.random() * fanTexts.length);
+                showFanText();
+            });
+            
+            // 扇子离开按钮
+            document.getElementById('leave-fan').addEventListener('click', () => {
+                document.getElementById('fan-modal').classList.remove('active');
+            });
+            
+            // 扇子画廊控制
+            document.getElementById('prev-fan').addEventListener('click', () => {
+                currentFanIndex = (currentFanIndex - 1 + fanTexts.length) % fanTexts.length;
+                showFanText();
+            });
+            
+            document.getElementById('next-fan').addEventListener('click', () => {
+                currentFanIndex = (currentFanIndex + 1) % fanTexts.length;
+                showFanText();
+            });
+            
+            // 音乐选择 - 使用免版税音乐
+            document.querySelectorAll('.song-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const audioPlayer = document.getElementById('audio-player');
+                    
+                    // 使用免版税音乐资源
+                    const songs = {
+                        'song1': 'https://cdn.pixabay.com/download/audio/2022/01/20/audio_dc946ebe0c.mp3?filename=serene-garden-208529.mp3',
+                        'song2': 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b45f32d7c.mp3?filename=peaceful-stream-21371.mp3',
+                        'song3': 'https://cdn.pixabay.com/download/audio/2022/10/25/audio_ecb505d825.mp3?filename=morning-dew-15449.mp3',
+                        'song4': 'https://cdn.pixabay.com/download/audio/2022/10/13/audio_7c7eb0eb0a.mp3?filename=bamboo-forest-191271.mp3'
+                    };
+                    
+                    audioPlayer.src = songs[this.dataset.song];
+                    audioPlayer.play();
+                    
+                    // 添加活跃状态
+                    document.querySelectorAll('.song-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 围棋控制按钮
+            document.getElementById('pass-btn').addEventListener('click', () => {
+                GoGame.pass();
+            });
+            
+            document.getElementById('resign-btn').addEventListener('click', () => {
+                GoGame.resign();
+            });
+            
+            document.getElementById('restart-btn').addEventListener('click', () => {
+                GoGame.init();
+                updateBoardDisplay();
+            });
         });
     </script>
 </body>
