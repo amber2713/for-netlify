@@ -20,7 +20,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
   };
 
  const handleExplore = () => {
-  window.open("https://jovial-naiad-a3ecb6.netlify.app", "_blank");
+  window.location.href = "https://jovial-naiad-a3ecb6.netlify.app";
 };
 
   const generateCharacter = async () => {
