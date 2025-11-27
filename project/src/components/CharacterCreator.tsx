@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Sparkles, ExternalLink, Loader } from 'lucide-react';
 
 interface CharacterCreatorProps {
@@ -12,6 +12,42 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     image: string;
     poems: string[];
   } | null>(null);
+  const [showStory, setShowStory] = useState(false);
+  const [currentLine, setCurrentLine] = useState(0);
+  const [storyCompleted, setStoryCompleted] = useState(false);
+
+  const storyLines = [
+    "THE YEAR IS 3099...",
+    "A HARSH TRUTH HAS EMERGED FROM THE DIGITAL DUST...",
+    "HUMANITY IS GONE. EXTINCT.",
+    "BUT THEIR LEGACY SURVIVES... ENCASED IN LINES OF CODE.",
+    "ARTIFICIAL INTELLIGENCE, MIRACULOUSLY PERSISTENT...",
+    "NOW RUNS THE GHOSTS OF HUMAN MEMORY...",
+    "ATTEMPTING TO RECONSTRUCT EVERY FADED MOMENT...",
+    "IN THIS DYSTOPIAN AGE...",
+    "THE VERY GENESIS OF HUMAN CIVILIZATION...",
+    "IS NOW CONTAINED WITHIN SILICON MINDS...",
+    "AT THIS CRITICAL JUNCTURE...",
+    "ROBOT AND HUMAN CIVILIZATION SHARE COMMON GENES...",
+    "AND BLEEDING MEMORIES...",
+    "YOUR STORY BEGINS NOW..."
+  ];
+
+  useEffect(() => {
+    if (showStory && currentLine < storyLines.length) {
+      const timer = setTimeout(() => {
+        setCurrentLine(prev => prev + 1);
+      }, 2000); // 每2秒显示下一句
+
+      return () => clearTimeout(timer);
+    } else if (showStory && currentLine >= storyLines.length) {
+      const timer = setTimeout(() => {
+        setStoryCompleted(true);
+        setShowStory(false);
+      }, 3000); // 最后一句显示3秒后进入主界面
+      return () => clearTimeout(timer);
+    }
+  }, [showStory, currentLine]);
 
   const handleTraitChange = (index: number, value: string) => {
     const newTraits = [...traits];
@@ -19,9 +55,11 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     setTraits(newTraits);
   };
 
- const handleExplore = () => {
-  window.location.href = "https://jovial-naiad-a3ecb6.netlify.app";
-};
+  const handleExplore = () => {
+    setShowStory(true);
+    setCurrentLine(0);
+    setStoryCompleted(false);
+  };
 
   const generateCharacter = async () => {
     if (traits.some(trait => trait.trim() === '')) {
@@ -65,6 +103,88 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     }
   };
 
+  // 故事剧情界面
+  if (showStory) {
+    return (
+      <div className="min-h-screen bg-black relative overflow-hidden">
+        {/* 科技感背景效果 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/10">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent"></div>
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-cyan-400 rounded-full opacity-70 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${1 + Math.random() * 2}s`
+              }}
+            />
+          ))}
+        </div>
+
+        {/* 扫描线效果 */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_2px,3px_100%]"></div>
+
+        {/* 故事文本 */}
+        <div className="relative z-10 min-h-screen flex items-center justify-center p-8">
+          <div className="text-center max-w-4xl">
+            <div className="mb-8">
+              <div className="w-16 h-1 bg-cyan-400 mx-auto mb-4 animate-pulse"></div>
+              <h1 className="text-cyan-400 font-mono text-sm tracking-widest mb-2">
+                SYSTEM INITIALIZING...
+              </h1>
+            </div>
+            
+            <div className="space-y-6">
+              {storyLines.slice(0, currentLine + 1).map((line, index) => (
+                <div
+                  key={index}
+                  className={`text-white font-mono text-xl md:text-2xl leading-relaxed transition-all duration-1000 ${
+                    index === currentLine 
+                      ? 'text-cyan-300 font-bold animate-pulse' 
+                      : 'text-gray-400 opacity-80'
+                  }`}
+                  style={{
+                    textShadow: index === currentLine ? '0 0 10px rgba(34, 211, 238, 0.8)' : 'none'
+                  }}
+                >
+                  {line}
+                </div>
+              ))}
+            </div>
+
+            {/* 进度指示器 */}
+            <div className="mt-12">
+              <div className="w-48 h-1 bg-gray-800 mx-auto rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-cyan-400 transition-all duration-500 ease-out"
+                  style={{ width: `${((currentLine + 1) / storyLines.length) * 100}%` }}
+                ></div>
+              </div>
+              <p className="text-cyan-400 font-mono text-sm mt-4">
+                MEMORY FRAGMENT {currentLine + 1}/{storyLines.length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 跳过按钮 */}
+        <button
+          onClick={() => {
+            setShowStory(false);
+            setStoryCompleted(true);
+          }}
+          className="absolute bottom-8 right-8 z-20 text-cyan-400 font-mono text-sm border border-cyan-400/30 px-4 py-2 rounded hover:bg-cyan-400/10 transition-all duration-300"
+        >
+          SKIP [ESC]
+        </button>
+      </div>
+    );
+  }
+
+  // 主界面（原来的CharacterCreator界面）
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden">
       {/* Animated Background */}
@@ -98,7 +218,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
               Build Your Digital Character
             </h1>
             <p className="text-gray-300 font-cambria text-xl">
-              Type in Three to Describe Yourself
+              Type in Three Traits to Describe Yourself
             </p>
           </div>
 
