@@ -12,7 +12,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     image: string;
     poems: string[];
   } | null>(null);
-  const [showStory, setShowStory] = useState(false);
+  const [showStory, setShowStory] = useState(true);
   const [currentLine, setCurrentLine] = useState(0);
   const [storyCompleted, setStoryCompleted] = useState(false);
 
@@ -47,7 +47,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
       }, 3000); // 最后一句显示3秒后进入主界面
       return () => clearTimeout(timer);
     }
-  }, [showStory, currentLine]);
+  }, [showStory, currentLine, storyLines.length]);
 
   const handleTraitChange = (index: number, value: string) => {
     const newTraits = [...traits];
@@ -56,9 +56,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
   };
 
   const handleExplore = () => {
-    setShowStory(true);
-    setCurrentLine(0);
-    setStoryCompleted(false);
+    window.location.href = "https://jovial-naiad-a3ecb6.netlify.app";
   };
 
   const generateCharacter = async () => {
@@ -103,7 +101,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     }
   };
 
-  // 故事剧情界面
+  // 故事剧情界面 - 在输入traits之前显示
   if (showStory) {
     return (
       <div className="min-h-screen bg-black relative overflow-hidden">
@@ -184,7 +182,7 @@ export default function CharacterCreator({ onBack }: CharacterCreatorProps) {
     );
   }
 
-  // 主界面（原来的CharacterCreator界面）
+  // 主界面（输入traits和生成角色的界面）
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden">
       {/* Animated Background */}
