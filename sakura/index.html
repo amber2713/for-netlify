@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakura Avenue - A Beautiful Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cambria:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cambria', serif;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 
+                         -1px -1px 0 white, 
+                         1px -1px 0 white, 
+                         -1px 1px 0 white, 
+                         1px 1px 0 white;
+        }
+        
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 182, 193, 0.2), rgba(255, 182, 193, 0.1)), 
+                        url('images/Sakura.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: -2;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: -1;
+        }
+        
+        .container {
+            width: calc(100% - 320px);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: 48px;
+            padding: 2rem 2rem 9rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 5vw, 4.8rem);
+            margin-bottom: 1.5rem;
+            color: #ff9aac;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8), 
+                         -2px -2px 0 white, 
+                         2px -2px 0 white, 
+                         -2px 2px 0 white, 
+                         2px 2px 0 white;
+        }
+        
+        p {
+            font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+            max-width: 720px;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #fff4f6;
+        }
+        
+        .quote {
+            font-style: italic;
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            color: #ffe6eb;
+        }
+        
+        /* Navigation Icons */
+        .nav-icon {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .nav-icon:hover {
+            transform: scale(1.3);
+        }
+        
+        .back-icon {
+            top: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            opacity: 0.8;
+        }
+        
+        .sakura-icon {
+            top: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            opacity: 0.6;
+        }
+        
+        .door-icon {
+            bottom: 30%;
+            right: 33%;
+            width: 60px;
+            height: 60px;
+            opacity: 0.5;
+        }
+        
+        /* Sakura falling animation */
+        .sakura-fall {
+            position: absolute;
+            top: -50px;
+            animation: fall linear forwards;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        /* Footer */
+        footer {
+            position: absolute;
+            bottom: 150px;
+            left: 320px;
+            right: 40px;
+            width: auto;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #fff;
+            z-index: 4;
+        }
+
+        .character-chat {
+            position: fixed;
+            left: 30px;
+            bottom: 20px;
+            width: min(240px, calc(100vw - 40px));
+            z-index: 900;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .guomo-character {
+            width: min(220px, 28vw);
+            max-height: 58vh;
+            object-fit: contain;
+            filter: drop-shadow(0 16px 26px rgba(75, 31, 45, 0.38));
+            pointer-events: none;
+        }
+
+        .ai-chat {
+            width: 100%;
+            color: #4b1f2d;
+            text-shadow: none;
+        }
+
+        .ai-chat-panel {
+            background: rgba(255, 250, 252, 0.94);
+            border: 1px solid rgba(255, 154, 172, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 10px 24px rgba(75, 31, 45, 0.24);
+            backdrop-filter: blur(10px);
+            padding: 7px;
+        }
+
+        .ai-chat-messages {
+            height: 38px;
+            overflow-y: auto;
+            padding: 2px 3px 6px;
+            font-size: 0.58rem;
+            line-height: 1.25;
+            text-align: left;
+        }
+
+        .ai-chat-message {
+            margin-bottom: 4px;
+        }
+
+        .ai-chat-message strong {
+            color: #b83256;
+        }
+
+        .ai-chat-form {
+            display: flex;
+            gap: 5px;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid rgba(184, 50, 86, 0.26);
+            border-radius: 999px;
+            padding: 6px 8px;
+            font: inherit;
+            font-size: 0.62rem;
+            color: #4b1f2d;
+            outline: none;
+            background: rgba(255, 255, 255, 0.86);
+        }
+
+        .ai-chat-input:focus {
+            border-color: #ff7894;
+            box-shadow: 0 0 0 3px rgba(255, 120, 148, 0.18);
+        }
+
+        .ai-chat-button {
+            width: 24px;
+            height: 24px;
+            border: 0;
+            border-radius: 50%;
+            background: #ff7894;
+            color: white;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .ai-chat-button:hover {
+            transform: translateY(-1px);
+            background: #e85f7d;
+        }
+
+        .ai-chat-button:disabled {
+            cursor: wait;
+            opacity: 0.7;
+            transform: none;
+        }
+        
+        /* New styles for the petal modal */
+        .petal-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .petal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            animation: scaleIn 0.5s ease;
+        }
+        
+        .petal-text {
+            font-size: 1.5rem;
+            color: #8b0000;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            font-style: italic;
+            z-index: 1001;
+            max-width: 300px;
+        }
+        
+        .petal-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            animation: rotatePetal 15s linear infinite;
+        }
+        
+        .click-hint {
+            font-size: 1.2rem;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+            color: #ffe6eb;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 1002;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .close-btn::before,
+        .close-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: #ff9aac;
+        }
+        
+        .close-btn::before {
+            transform: rotate(45deg);
+        }
+        
+        .close-btn::after {
+            transform: rotate(-45deg);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: translate(-50%, -50%) scale(0.5); }
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        @keyframes rotatePetal {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: 100%;
+                margin: 0;
+                padding: 5.5rem 1.25rem 15rem;
+                justify-content: flex-start;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+                margin-bottom: 1rem;
+            }
+
+            p {
+                font-size: 1.05rem;
+                line-height: 1.45;
+                margin-bottom: 1rem;
+                max-width: 100%;
+            }
+
+            .quote {
+                margin-top: 0.5rem;
+                font-size: 1rem;
+            }
+
+            footer {
+                display: none;
+            }
+
+            .character-chat {
+                left: 14px;
+                bottom: 12px;
+                width: 170px;
+            }
+
+            .guomo-character {
+                width: 150px;
+                max-height: 42vh;
+            }
+
+            .ai-chat-messages {
+                height: 34px;
+                font-size: 0.55rem;
+            }
+
+            .back-icon {
+                top: 16px;
+                left: 16px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (min-width: 701px) and (max-width: 1000px) {
+            .container {
+                width: calc(100% - 260px);
+                margin-right: 24px;
+                padding-bottom: 8rem;
+            }
+
+            .character-chat {
+                width: 210px;
+            }
+
+            .guomo-character {
+                width: 190px;
+            }
+
+            footer {
+                left: 260px;
+                right: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+    
+    <!-- Navigation Icons -->
+    <a href="https://amber2713.github.io/test/map/" class="nav-icon back-icon">
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#ff9aac" stroke="white" stroke-width="2"/>
+            <polygon points="60,25 30,50 60,75" fill="white"/>
+        </svg>
+    </a>
+    
+    <a href="https://amber2713.github.io/for-netlify/USTC-Garden-Party/" class="nav-icon sakura-icon">
+        <svg viewBox="0 0 100 100">
+            <path d="M50,20 
+                     C55,30 65,30 70,20 
+                     C80,40 80,50 70,60 
+                     C80,70 75,80 60,85 
+                     C50,95 50,95 40,85 
+                     C25,80 20,70 30,60 
+                     C20,50 20,40 30,20 
+                     C35,30 45,30 50,20" 
+                  fill="#ff9aac" stroke="white" stroke-width="1.5"/>
+        </svg>
+    </a>
+    
+    <a href="https://amber2713.github.io/Last/door/" class="nav-icon door-icon">
+        <svg viewBox="0 0 100 100">
+            <rect x="30" y="20" width="40" height="60" rx="5" fill="#8B4513" stroke="white" stroke-width="2"/>
+            <circle cx="60" cy="50" r="5" fill="#DAA520"/>
+            <rect x="30" y="70" width="40" height="5" fill="#654321"/>
+        </svg>
+    </a>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Sakura Avenue</h1>
+        <p class="click-hint">You can try clicking anywhere on the page</p>
+        <p>Walking along this beautiful path of cherry blossoms, one can't help but feel a sense of peace and wonder at nature's breathtaking beauty.</p>
+        <p class="quote">"In the cherry blossom's shade, there's no such thing as a stranger." - Kobayashi Issa</p>
+    </div>
+    
+    <!-- Petal Modal -->
+    <div id="petalModal" class="petal-modal">
+        <div class="petal-content">
+            <div class="close-btn" id="closeBtn"></div>
+            <svg class="petal-svg" viewBox="0 0 100 100">
+                <path d="M50,20 
+                         C55,30 65,30 70,20 
+                         C80,40 80,50 70,60 
+                         C80,70 75,80 60,85 
+                         C50,95 50,95 40,85 
+                         C25,80 20,70 30,60 
+                         C20,50 20,40 30,20 
+                         C35,30 45,30 50,20" 
+                      fill="#ffb7c5" stroke="#ff9aac" stroke-width="1"/>
+            </svg>
+            <p id="petalText" class="petal-text"></p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Experience the Beauty of Nature | Sakura Avenue 2023</p>
+    </footer>
+
+    <div class="character-chat">
+        <img class="guomo-character" src="images/guomo_suit_cutout.png" alt="Guomo">
+        <div class="ai-chat" aria-label="Sakura AI chat">
+            <div class="ai-chat-panel">
+                <div class="ai-chat-messages" id="chatDisplay">
+                    <div class="ai-chat-message"><strong>Sakura AI:</strong> Ask me under the blossoms.</div>
+                </div>
+                <form class="ai-chat-form" id="chatForm">
+                    <input class="ai-chat-input" id="userInput" type="text" placeholder="Ask..." autocomplete="off">
+                    <button class="ai-chat-button" id="sendButton" type="submit" aria-label="Send message">
+                        <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+                            <path d="M3.5 20.5 21 12 3.5 3.5 6 10.5 14 12 6 13.5z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create falling sakura petals
+        function createSakura() {
+            const sakura = document.createElement('div');
+            sakura.classList.add('sakura-fall');
+            
+            // Random size
+            const size = Math.random() * 20 + 10;
+            sakura.style.width = `${size}px`;
+            sakura.style.height = `${size}px`;
+            
+            // Random position
+            sakura.style.left = `${Math.random() * 100}vw`;
+            
+            // Random animation duration
+            const duration = Math.random() * 10 + 5;
+            sakura.style.animationDuration = `${duration}s`;
+            
+            // Sakura SVG
+            sakura.innerHTML = `
+                <svg viewBox="0 0 100 100" width="${size}" height="${size}">
+                    <path d="M50,20 
+                             C55,30 65,30 70,20 
+                             C80,40 80,50 70,60 
+                             C80,70 75,80 60,85 
+                             C50,95 50,95 40,85 
+                             C25,80 20,70 30,60 
+                             C20,50 20,40 30,20 
+                             C35,30 45,30 50,20" 
+                          fill="#ffb7c5" stroke="#ff9aac" stroke-width="1"/>
+                </svg>
+            `;
+            
+            document.body.appendChild(sakura);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                sakura.remove();
+            }, duration * 1000);
+        }
+        
+        // Create multiple sakura petals
+        setInterval(createSakura, 300);
+        
+        // Initial sakura
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createSakura, i * 100);
+        }
+        
+        // Array of beautiful quotes
+        const beautifulQuotes = [
+            "Like cherry blossoms in the spring, our love blooms anew with each passing day.",
+            "In your eyes, I found my home. In your heart, I found my love.",
+            "Your love is the poetry my heart has been trying to write.",
+            "Every moment with you is like a beautiful dream I never want to end.",
+            "You are the missing piece I never knew I was searching for.",
+            "My love for you is a journey starting at forever and ending at never.",
+            "In a sea of people, my eyes will always search for you.",
+            "You are the sun that brightens my darkest days.",
+            "I loved you yesterday, I love you still, I always have, I always will.",
+            "Your voice is my favorite sound, and your name is my favorite word.",
+            "I never want to stop making memories with you.",
+            "You are my today and all of my tomorrows.",
+            "I fall in love with you more every day.",
+            "You are the answer to every prayer I've offered.",
+            "With you, I've found the love I always dreamed of.",
+            "Your smile is the first thing I want to see in the morning.",
+            "I would choose you in a hundred lifetimes, in a hundred worlds, in any version of reality.",
+            "You're my favorite hello and my hardest goodbye.",
+            "Home isn't a place, it's wherever I'm with you.",
+            "I love you not only for what you are, but for what I am when I am with you.",
+            "Like cherry blossoms in the spring,our love blooms anew with each passing day.",
+            "In your eyes,I found my home.In your heart,I found my love.",
+            "Your love is the poetry my heart has been trying to write.",
+            "Every moment with you is like a beautiful dream I never want to end.",
+            "You are the missing piece I never knew I was searching for.",
+            "My love for you is a journey starting at forever and ending at never.",
+            "In a sea of people,my eyes will always search for you.",
+            "You are the sun that brightens my darkest days.",
+            "I loved you yesterday,I love you still,I always have,I always will.",
+            "Your voice is my favorite sound,and your name is my favorite word.",
+            "I never want to stop making memories with you.",
+            "You are my today and all of my tomorrows.",
+            "I fall in love with you more every day.",
+            "You are the answer to every prayer I've offered.",
+            "With you,I've found the love I always dreamed of.",
+            "Your smile is the first thing I want to see in the morning.",
+            "I would choose you in a hundred lifetimes,in a hundred worlds,in any version of reality.",
+            "You're my favorite hello and my hardest goodbye.",
+            "Home isn't a place,it's wherever I'm with you.",
+            "I love you not only for what you are,but for what I am when I am with you.",
+            "Like stars in the night sky,our love twinkles with endless possibilities.",
+            "In your smile,I found my happiness.In your touch,I found my comfort.",
+            "Your love is the melody my heart has been longing to hear.",
+            "Every glance at you is like a precious gift I cherish forever.",
+            "You are the hidden treasure I was destined to discover.",
+            "My love for you is a story that began with once upon a time and will never have an end.",
+            "In a crowd of faces,my heart will always beat for you.",
+            "You are the moon that lights up my darkest nights.",
+            "I loved you in the past,I love you now,I always did,I always will.",
+            "Your laughter is my favorite music,and your presence is my favorite place.",
+            "I never want to stop exploring the depths of our love.",
+            "You are my sunshine and all of my rainbows.",
+            "I fall more in love with you with each passing moment.",
+            "You are the fulfillment of every wish I've ever made.",
+            "With you,I've found the joy I always hoped for.",
+            "Your eyes are the first thing I want to see when I wake up.",
+            "I would choose you in a thousand lifetimes,in a thousand worlds,in any version of existence.",
+            "You're my favorite morning and my hardest nightfall.",
+            "Home isn't a house,it's wherever I'm with you.",
+            "I love you not only for what you do,but for who you are to me.",
+            "Like butterflies in the summer,our love flutters with pure delight.",
+            "In your kindness,I found my inspiration.In your patience,I found my strength.",
+            "Your love is the painting my heart has been trying to create.",
+            "Every thought of you is like a sweet dream I never want to wake up from.",
+            "You are the unexpected blessing I was always waiting for.",
+            "My love for you is a dance that started with a single step and will never stop.",
+            "In a sea of voices,my ears will always listen for you.",
+            "You are the rainbow that follows my darkest storms.",
+            "I loved you in the beginning,I love you still,I always have,I always will.",
+            "Your scent is my favorite fragrance,and your voice is my favorite song.",
+            "I never want to stop growing with you.",
+            "You are my dawn and all of my dusks.",
+            "I fall more in love with you with each heartbeat.",
+            "You are the answer to every riddle I've ever faced.",
+            "With you,I've found the peace I always longed for.",
+            "Your warmth is the first thing I want to feel in the morning.",
+            "I would choose you in a million lifetimes,in a million worlds,in any version of time.",
+            "You're my favorite sunrise and my hardest sunset.",
+            "Home isn't a location,it's wherever I'm with you.",
+            "I love you not only for what you give,but for who you are to me.",
+            "Like fireflies in the night,our love sparkles with gentle light.",
+            "In your courage,I found my bravery.In your love,I found my sanctuary.",
+            "Your love is the song my heart has been trying to sing.",
+            "Every encounter with you is like a beautiful poem I never want to finish.",
+            "You are the precious gem I was always searching for.",
+            "My love for you is a river that started with a single drop and will never dry up.",
+            "In a crowd of hearts,my soul will always yearn for you.",
+            "You are the light that guides me through my darkest paths.",
+            "I loved you in the moment,I love you still,I always have,I always will.",
+            "Your touch is my favorite feeling,and your smile is my favorite sight.",
+            "I never want to stop dreaming with you.",
+            "You are my spring and all of my autumns.",
+            "I fall more in love with you with each breath.",
+            "You are the key to every door I've ever wanted to open.",
+            "With you,I've found the beauty I always admired.",
+            "Your laughter is the first thing I want to hear in the morning.",
+            "I would choose you in a billion lifetimes,in a billion worlds,in any version of life.",
+            "You're my favorite joy and my hardest sorrow.",
+            "Home isn't a building,it's wherever I'm with you.",
+            "I love you not only for what you say,but for who you are to me.",
+            "Like roses in the garden,our love blooms with sweet fragrance.",
+            "In your understanding,I found my solace.In your support,I found my strength.",
+            "Your love is the dance my heart has been trying to perform.",
+            "Every moment spent with you is like a magical tale I never want to end.",
+            "You are the rare treasure I was always looking for.",
+            "My love for you is a voyage that started with a single sail and will never dock.",
+            "In a sea of souls,my spirit will always seek you.",
+            "You are the star that shines in my darkest skies.",
+            "I loved you in the instant,I love you still,I always have,I always will.",
+            "Your presence is my favorite presence,and your name is my favorite sound.",
+            "I never want to stop sharing my life with you.",
+            "You are my yesterday and all of my todays.",
+            "I fall more in love with you with each second.",
+            "You are the solution to every problem I've ever encountered.",
+            "With you,I've found the wonder I always marveled at.",
+            "Your kindness is the first thing I want to see in the morning.",
+            "I would choose you in a trillion lifetimes,in a trillion worlds,in any version of reality.",
+            "You're my favorite happiness and my hardest sadness.",
+            "Home isn't a place of residence,it's wherever I'm with you.",
+            "I love you not only for what you believe,but for who you are to me.",
+            "Like daisies in the meadow,our love blossoms with pure innocence.",
+            "In your generosity,I found my abundance.In your love,I found my fulfillment.",
+            "Your love is the story my heart has been trying to tell.",
+            "Every memory with you is like a perfect picture I never want to forget.",
+            "You are the hidden pearl I was always searching for.",
+            "My love for you is a melody that started with a single note and will never fade.",
+            "In a crowd of whispers,my heart will always listen for you.",
+            "You are the flame that warms my coldest nights.",
+            "I loved you in the blink of an eye,I love you still,I always have,I always will.",
+            "Your eyes are my favorite sight,and your smile is my favorite view.",
+            "I never want to stop building a future with you.",
+            "You are my morning and all of my evenings.",
+            "I fall more in love with you with each glance.",
+            "You are the answer to every question I've ever asked.",
+            "With you,I've found the magic I always believed in.",
+            "Your touch is the first thing I want to feel in the morning.",
+            "I would choose you in an infinite number of lifetimes,in an infinite number of worlds,in any version of existence.",
+            "You're my favorite beginning and my hardest ending.",
+            "Home isn't a destination,it's wherever I'm with you.",
+            "I love you not only for what you think,but for who you are to me.",
+            "Like sunbeams in the morning,our love shines with pure radiance.",
+            "In your love,I found my home.In your care,I found my comfort.",
+            "Your love is the poem my heart has been trying to write.",
+            "Every moment with you is like a beautiful song I never want to stop singing.",
+            "You are the missing piece I never knew I was searching for.",
+            "My love for you is a journey that started with a single step and will never end.",
+            "In a sea of people,my eyes will always search for you.",
+            "You are the sun that brightens my darkest days.",
+            "I loved you yesterday,I love you still,I always have,I always will.",
+            "Your voice is my favorite sound,and your name is my favorite word.",
+            "I never want to stop making memories with you.",
+            "You are my today and all of my tomorrows.",
+            "I fall in love with you more every day.",
+            "You are the answer to every prayer I've offered."
+        ];
+        
+        // Get modal elements
+        const petalModal = document.getElementById('petalModal');
+        const petalText = document.getElementById('petalText');
+        const closeBtn = document.getElementById('closeBtn');
+        
+        // Function to show random quote
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * beautifulQuotes.length);
+            petalText.textContent = beautifulQuotes[randomIndex];
+            petalModal.style.display = 'block';
+        }
+        
+        // Function to hide modal
+        function hideModal() {
+            petalModal.style.display = 'none';
+        }
+        
+        // Add click event listener to document
+        document.addEventListener('click', function(event) {
+            // Check if the click was on a navigation icon
+            const isNavIcon = event.target.closest('.nav-icon');
+            const isChat = event.target.closest('.ai-chat');
+            
+            // Check if click is in the middle 50% of the screen
+            const windowWidth = window.innerWidth;
+            const clickX = event.clientX;
+            const leftBoundary = windowWidth * 0.25;
+            const rightBoundary = windowWidth * 0.75;
+            
+            // If not a nav icon and in the middle 50% area, show the quote
+            if (!isNavIcon && !isChat && clickX >= leftBoundary && clickX <= rightBoundary) {
+                showRandomQuote();
+            }
+        });
+        
+        // Close modal when clicking on close button
+        closeBtn.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent event from bubbling to modal
+            hideModal();
+        });
+        
+        // Close modal when clicking outside the petal content
+        petalModal.addEventListener('click', function(event) {
+            if (event.target === petalModal) {
+                hideModal();
+            }
+        });
+
+        const chatHistory = [];
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const chatDisplay = document.getElementById('chatDisplay');
+        const sendButton = document.getElementById('sendButton');
+
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function addChatMessage(role, content) {
+            const message = document.createElement('div');
+            message.className = 'ai-chat-message';
+            const speaker = role === 'user' ? 'You' : 'Sakura AI';
+            message.innerHTML = `<strong>${speaker}:</strong> ${escapeHtml(content)}`;
+            chatDisplay.appendChild(message);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            return message;
+        }
+
+        async function handleChat(text) {
+            chatHistory.push({ role: 'user', content: text });
+            addChatMessage('user', text);
+
+            const loadingMessage = addChatMessage('assistant', 'Listening among the falling petals...');
+            sendButton.disabled = true;
+
+            try {
+                const response = await fetch('/.netlify/functions/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: chatHistory })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const content = data.content || 'The petals are quiet for a moment. Try asking again.';
+                chatHistory.push({ role: 'assistant', content });
+                loadingMessage.innerHTML = `<strong>Sakura AI:</strong> ${escapeHtml(content)}`;
+            } catch (error) {
+                loadingMessage.innerHTML = '<strong>Sakura AI:</strong> The breeze interrupted my reply. Please try again later.';
+            } finally {
+                sendButton.disabled = false;
+                userInput.focus();
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            }
+        }
+
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const text = userInput.value.trim();
+            if (!text || sendButton.disabled) return;
+            userInput.value = '';
+            handleChat(text);
+        });
+    </script>
+</body>
+</html>
