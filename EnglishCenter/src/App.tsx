@@ -105,7 +105,7 @@ function App() {
       {librarianState !== 'hidden' && (
         <div className="absolute right-8 bottom-0 z-10">
           <img
-            src="/src/assets/tushuguanliyuan.png"
+            src="/src/assets/guomo_suit_cutout_clean.png"
             alt="Librarian"
             className="h-96 object-contain drop-shadow-2xl"
           />
