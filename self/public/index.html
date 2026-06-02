@@ -149,8 +149,38 @@
             z-index: 100;
         }
 
-        /* 打印时隐藏返回按钮以防跳转 */
-        .back-button.locked {
+        /* 新增：左上角和右上角导航按钮样式 */
+        .top-nav-button {
+            position: fixed;
+            top: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .top-left-btn {
+            left: 30px;
+        }
+
+        .top-right-btn {
+            right: 30px;
+        }
+
+        .top-nav-button:hover, .back-button:hover {
+            background: rgba(0, 183, 255, 0.3);
+            transform: scale(1.05);
+            border-color: rgba(0, 183, 255, 0.5);
+        }
+
+        /* 打印时隐藏返回及顶部按钮以防跳转 */
+        .back-button.locked, .top-nav-button.locked {
             pointer-events: none;
             opacity: 0.2;
         }
@@ -266,7 +296,7 @@
             .container {
                 width: 100%;
                 margin: 0;
-                padding: 5rem 1.25rem 15rem;
+                padding: 7rem 1.25rem 15rem; /* 增加了顶部 padding 防止标题挡住新按钮 */
                 justify-content: flex-start;
             }
 
@@ -286,6 +316,19 @@
                 bottom: auto;
                 width: 52px;
                 height: 52px;
+            }
+
+            /* 移动端顶部导航按钮适配 */
+            .top-nav-button {
+                top: 18px;
+                width: 52px;
+                height: 52px;
+            }
+            .top-left-btn {
+                left: 80px; /* 避开返回按钮 */
+            }
+            .top-right-btn {
+                right: 18px;
             }
 
             .character-chat {
@@ -326,6 +369,23 @@
     <div class="background"></div>
     <div class="particles" id="particles"></div>
     
+    <a href="https://ssqure.netlify.app/" class="top-nav-button top-left-btn" id="topLeftBtn" title="Go to Square">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4H10V10H4V4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 4H20V10H14V4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 14H10V20H4V14Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 14H20V20H14V14Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
+
+    <a href="https://englishcenter-ai.netlify.app/" class="top-nav-button top-right-btn" id="topRightBtn" title="Go to English Learning Center">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12H22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2C14.5013 4.73831 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73831 12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
+
     <div class="container">
         <h1 class="title">Study Room</h1>
         
@@ -379,6 +439,8 @@
         const hiddenTextDiv = document.getElementById('hiddenText');
         const lockBtn = document.getElementById('lockBtn');
         const backBtn = document.getElementById('backBtn');
+        const topLeftBtn = document.getElementById('topLeftBtn');
+        const topRightBtn = document.getElementById('topRightBtn');
         const cursor = document.getElementById('cursor');
 
         async function typeSentence(sentence) {
@@ -393,10 +455,12 @@
         lockBtn.addEventListener('click', async function() {
             if (isTyping) return; // 如果正在打印，点击无效
 
-            // 1. 初始化状态，隐藏返回按钮，禁用锁点击
+            // 1. 初始化状态，隐藏返回按钮与顶部按钮，禁用锁点击
             isTyping = true;
             lockBtn.classList.add('disabled');
             backBtn.classList.add('locked');
+            topLeftBtn.classList.add('locked');
+            topRightBtn.classList.add('locked');
             textContent.innerHTML = ""; 
             hiddenTextDiv.style.display = 'block';
 
@@ -409,6 +473,8 @@
             isTyping = false;
             lockBtn.classList.remove('disabled');
             backBtn.classList.remove('locked');
+            topLeftBtn.classList.remove('locked');
+            topRightBtn.classList.remove('locked');
             cursor.style.display = 'none'; // 结束后光标消失
         });
 
