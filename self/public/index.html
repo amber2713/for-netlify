@@ -21,7 +21,7 @@
             position: relative;
         }
         
-        /* 背景图片：降低遮罩透明度以调高亮度 */
+        /* 背景图片 */
         .background {
             position: fixed;
             top: 0;
@@ -57,19 +57,19 @@
             75% { transform: translate(10px, 30px); }
         }
         
+        /* 修改：将容器设为绝对定位并水平居中，不再受右侧空间的干扰 */
         .container {
-            width: calc(100% - 540px); /* 动态适配右侧放大后的聊天区 */
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: 48px;
-            padding: 2rem 2rem 8rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%); /* 完美的屏幕物理正中间，稍微往上提一点防遮挡 */
+            width: 90%;
+            max-width: 700px;
             text-align: center;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: relative;
             z-index: 5;
         }
         
@@ -84,16 +84,18 @@
             text-shadow: 0 0 10px #fff, 0 0 20px #00b7ff;
             letter-spacing: 3px;
             z-index: 10;
+            white-space: nowrap;
         }
         
-        /* 修改：锁图标恢复完美居中 */
+        /* 锁图标容器（完美居中） */
         .lock-container {
-            margin: 2rem 0;
+            margin: 2rem auto;
             padding: 1.5rem;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 15px;
             transition: all 0.3s ease;
             cursor: pointer;
+            display: inline-block;
         }
 
         /* 正在打印时的禁用样式 */
@@ -110,10 +112,11 @@
             margin: 0 auto;
         }
         
-        /* 修改：打字文本框恢复完美居中 */
+        /* 打字文本框（完美居中） */
         .hidden-text {
+            width: 100%;
             max-width: 600px;
-            margin: 2rem auto;
+            margin: 1.5rem auto 0;
             padding: 2rem;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
@@ -309,16 +312,17 @@
             }
 
             .container {
-                width: 100%;
-                margin: 0;
-                padding: 10rem 1.25rem 22rem;
-                justify-content: flex-start;
+                width: 90%;
+                position: absolute;
+                top: 45%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
 
             .title {
                 font-size: 2.5rem;
                 top: 80px;
-                position: absolute;
+                position: fixed;
             }
 
             .hidden-text {
@@ -370,22 +374,6 @@
             .ai-chat-button {
                 width: 26px;
                 height: 26px;
-            }
-        }
-
-        @media (min-width: 761px) and (max-width: 1140px) {
-            .container {
-                width: calc(100% - 460px);
-                margin-right: 24px;
-                padding-bottom: 7rem;
-            }
-
-            .character-chat {
-                width: 420px;
-            }
-
-            .guomo-character {
-                width: 390px;
             }
         }
     </style>
@@ -452,7 +440,6 @@
     </div>
 
     <script>
-        // 修改：点击锁出现的句子替换为你的指定英文内容
         const sentences = [
             "Students always study here by themselves,",
             "so much so that few remember this place is called Yingcai Academy.",
@@ -472,16 +459,15 @@
         async function typeSentence(sentence) {
             for (let i = 0; i < sentence.length; i++) {
                 textContent.innerHTML += sentence.charAt(i);
-                await new Promise(resolve => setTimeout(resolve, 50)); // 打字速度
+                await new Promise(resolve => setTimeout(resolve, 50)); 
             }
-            textContent.innerHTML += "<br><br>"; // 句子间的换行
-            await new Promise(resolve => setTimeout(resolve, 600)); // 句子间的停顿
+            textContent.innerHTML += "<br><br>"; 
+            await new Promise(resolve => setTimeout(resolve, 600)); 
         }
 
         lockBtn.addEventListener('click', async function() {
-            if (isTyping) return; // 如果正在打印，点击无效
+            if (isTyping) return; 
 
-            // 1. 初始化状态，隐藏返回按钮与顶部按钮，禁用锁点击
             isTyping = true;
             lockBtn.classList.add('disabled');
             backBtn.classList.add('locked');
@@ -490,21 +476,18 @@
             textContent.innerHTML = ""; 
             hiddenTextDiv.style.display = 'block';
 
-            // 2. 逐句播放
             for (let sentence of sentences) {
                 await typeSentence(sentence);
             }
 
-            // 3. 播放结束，解除锁定
             isTyping = false;
             lockBtn.classList.remove('disabled');
             backBtn.classList.remove('locked');
             topLeftBtn.classList.remove('locked');
             topRightBtn.classList.remove('locked');
-            cursor.style.display = 'none'; // 结束后光标消失
+            cursor.style.display = 'none'; 
         });
 
-        // 浮动粒子逻辑保持不变
         function createParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 50; i++) {
