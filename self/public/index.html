@@ -28,7 +28,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* 调整：从 0.7/0.9 降至 0.4/0.6 */
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('images/selfstudy.png');
             background-size: cover;
             background-position: center;
@@ -74,7 +73,7 @@
             z-index: 5;
         }
         
-        /* 修改：标题放在最上面的正中间 */
+        /* 标题定位于最上面的正中间 */
         .title {
             position: fixed;
             top: 30px;
@@ -87,7 +86,7 @@
             z-index: 10;
         }
         
-        /* 修改：将锁整体向左移动了一点 (transform: translateX(-40px)) */
+        /* 修改：锁图标恢复完美居中 */
         .lock-container {
             margin: 2rem 0;
             padding: 1.5rem;
@@ -95,7 +94,6 @@
             border-radius: 15px;
             transition: all 0.3s ease;
             cursor: pointer;
-            transform: translateX(-40px); 
         }
 
         /* 正在打印时的禁用样式 */
@@ -112,6 +110,7 @@
             margin: 0 auto;
         }
         
+        /* 修改：打字文本框恢复完美居中 */
         .hidden-text {
             max-width: 600px;
             margin: 2rem auto;
@@ -124,7 +123,6 @@
             min-height: 150px;
             display: none;
             text-align: left;
-            transform: translateX(-40px); /* 让文本框和锁一起向左微调保持视觉平衡 */
         }
 
         /* 模拟打字机光标 */
@@ -157,7 +155,7 @@
             z-index: 100;
         }
 
-        /* 新增：左上角和右上角导航按钮样式 */
+        /* 左上角和右上角导航按钮样式 */
         .top-nav-button {
             position: fixed;
             top: 30px;
@@ -193,12 +191,12 @@
             opacity: 0.2;
         }
 
-        /* 修改：整个聊天包装区域同比放大 1.5 倍相关调整 */
+        /* 整个聊天包装区域同比放大 1.5 倍相关调整 */
         .character-chat {
             position: fixed;
-            right: 30px; /* 原代码逻辑居右 */
+            right: 30px;
             bottom: 20px;
-            width: min(510px, calc(100vw - 40px)); /* 340px * 1.5 = 510px */
+            width: min(510px, calc(100vw - 40px));
             z-index: 120;
             display: flex;
             flex-direction: column;
@@ -206,9 +204,9 @@
             gap: 12px;
         }
 
-        /* 修改：人物放大至原来的 1.5 倍 */
+        /* 人物放大至原来的 1.5 倍 */
         .guomo-character {
-            width: min(480px, 45vw); /* 320px * 1.5 = 480px */
+            width: min(480px, 45vw);
             max-height: 66vh;
             object-fit: contain;
             filter: drop-shadow(0 18px 30px rgba(0, 183, 255, 0.24));
@@ -221,7 +219,6 @@
             text-shadow: none;
         }
 
-        /* 修改：面板内边距等同比微调 */
         .ai-chat-panel {
             background: rgba(5, 15, 24, 0.82);
             border: 1px solid rgba(0, 183, 255, 0.55);
@@ -231,12 +228,11 @@
             padding: 12px;
         }
 
-        /* 修改：对话展示区域高度和字体同比放大 */
         .ai-chat-messages {
-            height: 66px; /* 44px * 1.5 */
+            height: 66px;
             overflow-y: auto;
             padding: 4px 6px 10px;
-            font-size: 0.93rem; /* 0.62rem * 1.5 */
+            font-size: 0.93rem;
             line-height: 1.4;
             text-align: left;
         }
@@ -254,7 +250,6 @@
             gap: 8px;
         }
 
-        /* 修改：输入框字体和间距调整 */
         .ai-chat-input {
             flex: 1;
             min-width: 0;
@@ -262,7 +257,7 @@
             border-radius: 999px;
             padding: 8px 12px;
             font: inherit;
-            font-size: 0.93rem; /* 0.62rem * 1.5 */
+            font-size: 0.93rem;
             color: #dff7ff;
             outline: none;
             background: rgba(255, 255, 255, 0.08);
@@ -277,7 +272,6 @@
             box-shadow: 0 0 0 3px rgba(0, 183, 255, 0.16);
         }
 
-        /* 修改：发送按钮尺寸适当放大 */
         .ai-chat-button {
             width: 32px;
             height: 32px;
@@ -317,18 +311,14 @@
             .container {
                 width: 100%;
                 margin: 0;
-                padding: 10rem 1.25rem 22rem; /* 增加了顶部高度防止中间的标题挡住元素 */
+                padding: 10rem 1.25rem 22rem;
                 justify-content: flex-start;
             }
 
             .title {
                 font-size: 2.5rem;
-                top: 80px; /* 移动端防按钮重叠下移 */
+                top: 80px;
                 position: absolute;
-            }
-
-            .lock-container, .hidden-text {
-                transform: translateX(0); /* 移动端取消左移，保持居中居美观 */
             }
 
             .hidden-text {
@@ -350,19 +340,18 @@
                 height: 52px;
             }
             .top-left-btn {
-                left: 80px; /* 避开返回按钮 */
+                left: 80px;
             }
             .top-right-btn {
                 right: 18px;
             }
 
-            /* 移动端同比放大后的聊天框适配 */
             .character-chat {
                 left: 50%;
-                transform: translateX(-50%); /* 移动端小屏居中显示更佳 */
+                transform: translateX(-50%);
                 right: auto;
                 bottom: 12px;
-                width: 280px; 
+                width: 280px;
             }
 
             .guomo-character {
@@ -463,11 +452,12 @@
     </div>
 
     <script>
+        // 修改：点击锁出现的句子替换为你的指定英文内容
         const sentences = [
-            "Is it closed?",
-            "I seem to remember there used to be a lot of people here.",
-            "If you came late, there would be no seats...",
-            "and it seems that some people would use books to occupy a seat for others."
+            "Students always study here by themselves,",
+            "so much so that few remember this place is called Yingcai Academy.",
+            "Let’s not go in and disturb the slumber of the books.",
+            "Feel free to ask me anything you'd like to know."
         ];
 
         let isTyping = false;
