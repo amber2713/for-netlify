@@ -48,18 +48,17 @@
         }
         
         .container {
-            width: calc(100% - 320px);
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: 48px;
-            padding: 2rem 2rem 9rem;
+            position: absolute;
+            left: 320px;
+            right: 48px;
+            top: 0;
             height: 100%;
+            padding: 2rem 2rem 9rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            position: relative;
             z-index: 5;
         }
         
@@ -145,7 +144,7 @@
             position: absolute;
             bottom: 150px;
             left: 320px;
-            right: 40px;
+            right: 48px;
             width: auto;
             text-align: center;
             font-size: 1.2rem;
@@ -443,12 +442,7 @@
     <div class="overlay"></div>
     
     <!-- Navigation Icons -->
-    <a href="https://amber2713.github.io/test/map/" class="nav-icon back-icon">
-        <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="#ff9aac" stroke="white" stroke-width="2"/>
-            <polygon points="60,25 30,50 60,75" fill="white"/>
-        </svg>
-    </a>
+    
     
     <a href="https://amber2713.github.io/for-netlify/USTC-Garden-Party/" class="nav-icon sakura-icon">
         <svg viewBox="0 0 100 100">
@@ -499,9 +493,7 @@
         </div>
     </div>
     
-    <footer>
-        <p>Experience the Beauty of Nature | Sakura Avenue 2023</p>
-    </footer>
+    <footer></footer>
 
     <div class="character-chat">
         <img class="guomo-character" src="images/guomo_suit_cutout.png" alt="Guomo">
