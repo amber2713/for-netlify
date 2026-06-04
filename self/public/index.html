@@ -57,12 +57,26 @@
             75% { transform: translate(10px, 30px); }
         }
         
-        /* 修改：将容器设为绝对定位并水平居中，不再受右侧空间的干扰 */
+        /* 核心修改：标题置于整个屏幕的最上方正中间 */
+        .title {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4.5rem;
+            margin-bottom: 0;
+            text-shadow: 0 0 10px #fff, 0 0 20px #00b7ff;
+            letter-spacing: 3px;
+            z-index: 10;
+            white-space: nowrap;
+        }
+        
+        /* 核心修改：锁和对话框的主容器在屏幕物理正中央（略微偏下，避开顶部标题） */
         .container {
             position: absolute;
-            top: 50%;
+            top: 55%;
             left: 50%;
-            transform: translate(-50%, -40%); /* 完美的屏幕物理正中间，稍微往上提一点防遮挡 */
+            transform: translate(-50%, -50%);
             width: 90%;
             max-width: 700px;
             text-align: center;
@@ -73,22 +87,9 @@
             z-index: 5;
         }
         
-         /* 标题定位于最上面的正中间 */
-        .title {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 4.5rem;
-            margin-bottom: 0;
-            text-shadow: 0 0 10px #fff, 0 0 20px #00b7ff;
-            letter-spacing: 3px;
-            z-index: 10;
-        }
-        
         /* 锁图标容器（完美居中） */
         .lock-container {
-            margin: 2rem auto;
+            margin: 0 auto 2rem;
             padding: 1.5rem;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 15px;
@@ -115,7 +116,7 @@
         .hidden-text {
             width: 100%;
             max-width: 600px;
-            margin: 1.5rem auto 0;
+            margin: 0 auto;
             padding: 2rem;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
@@ -313,9 +314,9 @@
             .container {
                 width: 90%;
                 position: absolute;
-                top: 45%;
+                top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -35%);
             }
 
             .title {
@@ -381,6 +382,8 @@
     <div class="background"></div>
     <div class="particles" id="particles"></div>
     
+    <h1 class="title">Study Room</h1>
+
     <a href="https://ssqure.netlify.app/" class="top-nav-button top-left-btn" id="topLeftBtn" title="Go to Square">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 4H10V10H4V4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -399,8 +402,6 @@
     </a>
 
     <div class="container">
-        <h1 class="title">Study Room</h1>
-        
         <div class="lock-container" id="lockBtn">
             <svg class="lock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 16C12.8284 16 13.5 15.3284 13.5 14.5C13.5 13.6716 12.8284 13 12 13C11.1716 13 10.5 13.6716 10.5 14.5C10.5 15.3284 11.1716 16 12 16Z" fill="#00b7ff"/>
