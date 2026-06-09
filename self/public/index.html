@@ -425,7 +425,7 @@
         <div class="ai-chat" aria-label="Study Room AI chat">
             <div class="ai-chat-panel">
                 <div class="ai-chat-messages" id="chatDisplay">
-                    <div class="ai-chat-message"><strong>Study AI:</strong> Ask me quietly in the study room.</div>
+                    <div class="ai-chat-message"><strong>Guo Moruo:</strong> Ask me quietly in the study room.</div>
                 </div>
                 <form class="ai-chat-form" id="chatForm">
                     <input class="ai-chat-input" id="userInput" type="text" placeholder="Ask..." autocomplete="off">
@@ -521,7 +521,7 @@
         function addChatMessage(role, content) {
             const message = document.createElement('div');
             message.className = 'ai-chat-message';
-            const speaker = role === 'user' ? 'You' : 'Study AI';
+            const speaker = role === 'user' ? 'You' : 'Guo Moruo';
             message.innerHTML = `<strong>${speaker}:</strong> ${escapeHtml(content)}`;
             chatDisplay.appendChild(message);
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
@@ -549,9 +549,9 @@
                 const data = await response.json();
                 const content = data.content || 'The room is quiet for a moment. Try asking again.';
                 chatHistory.push({ role: 'assistant', content });
-                loadingMessage.innerHTML = `<strong>Study AI:</strong> ${escapeHtml(content)}`;
+                loadingMessage.innerHTML = `<strong>Guo Moruo:</strong> ${escapeHtml(content)}`;
             } catch (error) {
-                loadingMessage.innerHTML = '<strong>Study AI:</strong> The connection went quiet. Please try again later.';
+                loadingMessage.innerHTML = '<strong>Guo Moruo:</strong> The connection went quiet. Please try again later.';
             } finally {
                 sendButton.disabled = false;
                 userInput.focus();
